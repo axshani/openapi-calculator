@@ -1,0 +1,82 @@
+openapi: 3.0.0
+info:
+  description: A RESTful Calculator server
+  version: "0.0.1"
+  title: "RESTful-Server for Calculator API"
+tags:
+  - name: calculator-server
+    description: Calculator Server
+servers:
+  - url: /
+paths:
+  /api:
+    post:
+      tags:
+          - calculator-controller
+      operationId: execute
+      parameters:
+        - in: header
+          name: X-Request-Operation
+          schema:
+            type: string
+            enum: ['+', '-', '*', '/']
+          required: true
+      requestBody:
+        description: Perform Operation Request
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstValue:
+                  type: number
+                secondValue:
+                  type: number
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Result:
+      type: object
+      properties:
+        firstValue:
+          type: number
+        secondValue:
+          type: number
+        operator:
+          type: string
+        result:
+          type: number
+    # Schema for error response body
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+# 1) Define the security scheme type (HTTP bearer)      
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+# 2) Apply the security globally to all operations
+security:
+  - bearerAuth: []

@@ -1,0 +1,92 @@
+openapi: 3.0.0
+info:
+  title: RESTful-Server for Calculator API
+  description: A RESTful Calculator server
+  version: 0.0.1
+servers:
+- url: /
+security:
+- bearerAuth: []
+tags:
+- name: calculator-server
+  description: Calculator Server
+paths:
+  /api:
+    post:
+      tags:
+      - calculator-controller
+      operationId: execute
+      parameters:
+      - name: X-Request-Operation
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - "+"
+          - "-"
+          - '*'
+          - /
+      requestBody:
+        description: Perform Operation Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api_body'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: CalculatorController
+components:
+  schemas:
+    Result:
+      type: object
+      properties:
+        firstValue:
+          type: number
+        secondValue:
+          type: number
+        operator:
+          type: string
+        result:
+          type: number
+      example:
+        result: 1.4658129805029452
+        firstValue: 0.8008281904610115
+        secondValue: 6.027456183070403
+        operator: operator
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    api_body:
+      type: object
+      properties:
+        firstValue:
+          type: number
+        secondValue:
+          type: number
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,23 @@
+{
+  "name": "restful-server-for-calculator-api",
+  "version": "0.0.1",
+  "description": "A RESTful Calculator server",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Unlicense",
+  "private": true,
+  "dependencies": {
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "oas3-tools": "^2.2.3"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0"
+  }
+}
